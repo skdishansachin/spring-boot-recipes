@@ -10,8 +10,6 @@ Spring Boot provides logging capabilities using **SLF4J** (Simple Logging Facade
 4. **Custom Logging Messages**: How to log specific messages or data during your app’s execution.
 5. **Additional Configuration**: Logging rotation, pattern formatting, etc.
 
----
-
 ### **Basic Logging Setup**
 
 Spring Boot uses **SLF4J** with **Logback** as the default logging framework, so in most cases, you don't need to add any external dependencies. However, for flexibility, let’s ensure that you have the logging dependencies in your `pom.xml`.
@@ -27,8 +25,6 @@ Spring Boot uses **SLF4J** with **Logback** as the default logging framework, so
     <artifactId>logback-classic</artifactId>
 </dependency>
 ```
-
----
 
 ### **Basic Logging Example in Spring Boot**
 
@@ -64,8 +60,6 @@ In this example:
 
 - `logger.info()`, `logger.debug()`, `logger.warn()`, and `logger.error()` log messages at various levels.
 - These logs will appear in your console by default.
-
----
 
 ### **Configuring Log Output to a File**
 
@@ -106,8 +100,6 @@ logging:
 - The logging level is set to `INFO`, but you can adjust it to `DEBUG`, `WARN`, `ERROR`, etc.
 - **Log rotation** ensures your log file doesn't grow endlessly (configurable with `max-size` and `max-history`).
 
----
-
 ### **Custom Log Messages**
 
 ### **Example: Logging HTTP Request Details**
@@ -146,8 +138,6 @@ This example shows how to:
 - Log the **IP address** of the incoming request.
 - Log the **payload** (`todo`).
 - Log a **debug** message for business logic.
-
----
 
 ### **Advanced Logback Configuration (Optional)**
 
@@ -197,8 +187,6 @@ If you need more advanced control over your logging, you can create a **custom L
 - The log file will **rotate daily**, and the application will keep logs for up to 30 days.
 - The log format is customizable, showing a **timestamp**, **log level**, **thread name**, and **message**.
 
----
-
 ### **Logging Exceptions**
 
 You can also log exceptions using `logger.error()` to capture stack traces:
@@ -222,8 +210,6 @@ public String getTodoById(@PathVariable int id) {
 ```
 
 - `logger.error("message", ex)` captures the stack trace for the exception, which can be invaluable when debugging issues.
-
----
 
 ### **Using a Logging Facade (Optional)**
 
