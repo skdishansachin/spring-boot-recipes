@@ -8,7 +8,7 @@
 - [Custom Logging Messages]()
 - [Additional Configuration]()
 
-Spring Boot provides logging capabilities using (**SLF4J**)[https://www.slf4j.org/] (Simple Logging Facade for Java) and (**Logback**)[https://logback.qos.ch/] (the default logging framework).
+Spring Boot provides logging capabilities using [**SLF4J**](https://www.slf4j.org/) (Simple Logging Facade for Java) and [**Logback**](https://logback.qos.ch/) (the default logging framework).
 
 ## Writing Log Messages
 
