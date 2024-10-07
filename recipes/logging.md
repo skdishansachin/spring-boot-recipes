@@ -5,14 +5,13 @@
   - [Logging to a file](#logging-to-a-file)
 - [Logging Levels](#logging-levels)
 - [Additional Configuration](#additional-configuration-optional)
-- [Extra](#extra)
-  - [Using a Logging Facade](#using-a-logging-facade)
+- [Using a Logging Facade](#using-a-logging-facade)
 
 Spring Boot provides logging capabilities using [**SLF4J**](https://www.slf4j.org/) (Simple Logging Facade for Java) and [**Logback**](https://logback.qos.ch/) (the default logging framework).
 
 ## Writing Log Messages
 
-Spring Boot uses **SLF4J** with **Logback** as the default logging framework, so in most cases, you don't need to add any external dependencies. However, for flexibility, let’s ensure that you have the logging dependencies in your `pom.xml`.
+Spring Boot uses **SLF4J** with **Logback** as the default logging framework, so in most cases, you don't need to add any external dependencies. However, to ensure flexibility, make sure the following dependencies are in your `pom.xml`:
 
 ```xml
 <dependency>
@@ -28,7 +27,7 @@ Spring Boot uses **SLF4J** with **Logback** as the default logging framework, so
 
 ### Logging to the console
 
-You can log data from any class using the `Logger` interface. Here's an example of how to log data in a service or controller class:
+You can log messages from any class using the `Logger` interface. Here's an example of how to log data in a service or controller class:
 
 ```java
 import org.slf4j.Logger;
@@ -53,7 +52,6 @@ public class AlertController {
         return "Todo List";
     }
 }
-
 ```
 
 In this example:
@@ -63,20 +61,20 @@ In this example:
 
 ### Logging to a File
 
-By default, Spring Boot logs only to the **console**. To configure logging to write to a **file**, you need to set this up in the `application.properties` or `application.yml` file.
+By default, Spring Boot logs only to the **console**. To configure logging to write to a **file**, you can set this up in the `application.properties` or `application.yml` file.
 
 #### Using `application.properties`
 
-In your `src/main/resources/application.properties`, you can define file-based logging like this:
+In your `src/main/resources/application.properties`, configure file-based logging like this:
 
-```
-logging.file.name=logs/myapp.log
+```properties
+logging.file.name=logs/application.log
 logging.level.root=INFO
 ```
 
 #### Using `application.yml`
 
-Alternatively, if you’re using YAML configuration (`src/main/resources/application.yml`), the setup will look like this:
+Alternatively, if you're using YAML configuration (`src/main/resources/application.yml`), the setup would look like this:
 
 ```yaml
 logging:
@@ -86,19 +84,23 @@ logging:
     root: INFO
 ```
 
-**Optionaly** you can add configuration like
+**Optionally**, you can add more configurations like:
 
-```
+```properties
 logging.level.com.yourpackage=DEBUG
 logging.file.max-size=10MB
 logging.file.max-history=10
 ```
 
-Here is the full list for propoties avalable for loggin -
+Here is the full list of properties available for logging:
+
+- `logging.file.name`: Specifies the name and location of the log file.
+- `logging.file.max-size`: Maximum size of the log file before rolling over.
+- `logging.file.max-history`: How many rolled-over log files to retain.
 
 **What This Does:**
 
-- Logs will be written to a file located at `logs/`application`.log`.
+- Logs will be written to a file located at `logs/application.log`.
 - The logging level is set to `INFO`, but you can adjust it to `DEBUG`, `WARN`, `ERROR`, etc.
 - **Log rotation** ensures your log file doesn't grow endlessly (configurable with `max-size` and `max-history`).
 
@@ -108,35 +110,41 @@ Logging levels allow you to control the verbosity of your logs. Here are the com
 
 | Level | Description                                                                  |
 | ----- | ---------------------------------------------------------------------------- |
-| TRACE | The most detailed level of logging, typically used for debugging purposes.   |
-| DEBUG | Detailed information useful for debugging the application.                   |
-| INFO  | General information about the application's progress.                        |
-| WARN  | Indicates a potential issue that may cause problems in the future.           |
-| ERROR | Indicates a serious error that may prevent the application from functioning. |
+| TRACE | The most detailed level, typically used for fine-grained debugging.          |
+| DEBUG | Provides debugging information, useful for development troubleshooting.      |
+| INFO  | Logs important but general application events or statuses.                   |
+| WARN  | Indicates a potential problem that isn't breaking, but might need attention. |
+| ERROR | Logs serious issues that might cause the application to malfunction.         |
 
-You can set the desired logging level in your application's configuration file (`application.properties` or `application.yml`) using the `logging.level` property. For example, to set the logging level to `DEBUG`, you can add the following line to your `application.properties` or `application.yml` file:
+Logging levels are hierarchical. For example, if you set the logging level to `INFO`, it will capture all `INFO`, `WARN`, and `ERROR` logs, but ignore `DEBUG` and `TRACE`.
 
-```
+To set the logging level in your configuration file, add:
+
+```properties
 logging.level.root=DEBUG
 ```
 
-This will enable logging at the `DEBUG` level for all classes in your application. You can also specify the logging level for specific packages or classes by using their respective names in the configuration file.
+This will apply the `DEBUG` level globally across your app. You can also adjust the logging level for specific packages:
+
+```properties
+logging.level.com.yourpackage=DEBUG
+```
 
 ## Additional Configuration (Optional)
 
 If you need more control over your logging, you can create a **custom Logback configuration file** (`logback-spring.xml`). This file allows for customization of log formats, rolling policies, and different appenders (console, file, etc.).
 
-`src/main/resources/logback-spring.xml`
+Place this file under `src/main/resources/logback-spring.xml`:
 
 ```xml
 <configuration>
 
     <!-- Define log format (timestamp, log level, logger, and message) -->
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>logs/myapp.log</file>
+        <file>logs/application.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- Logs will rotate daily, keeping up to 30 days of logs -->
-            <fileNamePattern>logs/myapp-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>logs/application-%d{yyyy-MM-dd}.log</fileNamePattern>
             <maxHistory>30</maxHistory>
         </rollingPolicy>
         <encoder>
@@ -161,17 +169,16 @@ If you need more control over your logging, you can create a **custom Logback co
     <logger name="com.yourpackage" level="DEBUG"/>
 
 </configuration>
-
 ```
 
 **What This Does:**
 
-- Logs will be written both to the **console** and **file**.
+- Logs will be written both to the **console** and a **file**.
 - The log file will **rotate daily**, and the application will keep logs for up to 30 days.
 - The log format is customizable, showing a **timestamp**, **log level**, **thread name**, and **message**.
 
-## Extra
+## Using a Logging Facade
 
-### Using a Logging Facade
+Spring Boot uses **SLF4J** as a facade for logging. This is useful in large projects because it decouples your application from a specific logging framework like **Logback** or **Log4J**. With SLF4J, you can switch to another logging framework without changing your logging code.
 
-Spring Boot uses **SLF4J** as a facade for logging. If you're working on a bigger project and want to make your logging framework interchangeable (i.e., replace Logback with another framework in the future), stick to using **SLF4J** (`LoggerFactory.getLogger()`). This allows you to swap out logging implementations (like Log4J) without changing your logging code.
+By sticking to SLF4J in your code (e.g., `LoggerFactory.getLogger()`), you keep the flexibility to swap in a different logging implementation simply by changing dependencies or configurations. This makes your codebase more modular and adaptable for future needs.
