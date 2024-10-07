@@ -86,10 +86,26 @@ logging:
 
 **Optionally**, you can add more configurations like:
 
-```properties
-logging.level.com.yourpackage=DEBUG
-logging.file.max-size=10MB
-logging.file.max-history=10
+Using `application.properties`
+
+```diff
+logging.file.name=logs/application.log
+logging.level.root=INFO
++ logging.level.com.yourpackage=DEBUG
++ logging.file.max-size=10MB
++ logging.file.max-history=10
+```
+
+Using `application.yml`
+
+```diff
+ logging:
+   file:
+     name: logs/application.log
++    max-size: 10MB
++    max-history: 10
+   level:
+     root: INFO
 ```
 
 Here is the full list of properties available for logging:
