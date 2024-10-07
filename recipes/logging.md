@@ -1,10 +1,3 @@
----
-**Author**: [skdishansachin](https://github.com/skdishansachin)
-**Created**: 2024/10/6
-**Last Updated**: N/A
-**Contributors**: N/A
----
-
 # Logging
 
 - [Writing Log Messages](#writing-log-messages)
