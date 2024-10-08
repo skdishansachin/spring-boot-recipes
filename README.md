@@ -11,5 +11,3 @@ I've created this repository to provide clear guides and examples for implementi
 Feel free to contribute! Whether you want to introduce a new recipe or help by correcting any errors or typos in existing recipes, feel free to do so.
 
 Check out the [contribution guide](CONTRIBUTING.md).
-
-See you around!
