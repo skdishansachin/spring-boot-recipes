@@ -27,7 +27,29 @@ Spring Boot uses **SLF4J** with **Logback** as the default logging framework, so
 
 ### Logging to the console
 
-You can log messages from any class using the `Logger` interface. Here's an example of how to log data in a service or controller class:
+You can log messages from any class using the `Logger` interface. To configure logging to write to a **console**, you can set this up in the `application.properties` or `application.yml` file.
+
+#### Using `application.properties`
+
+In your `src/main/resources/application.properties`, configure console-based logging like this:
+
+```properties
+logging.level.root=INFO
+```
+
+#### Using `application.yml`
+
+If you're using YAML configuration (`src/main/resources/application.yml`), the setup would look like this:
+
+```yaml
+logging:
+  level:
+    root: INFO
+```
+
+This sets the log level to `INFO` for console logging.
+
+Here's an example of how to log data in a service or controller class. Feel free to use it anywhere you want:
 
 ```java
 import org.slf4j.Logger;
@@ -54,7 +76,7 @@ public class AlertController {
 }
 ```
 
-In this example:
+In the above example:
 
 - `logger.info()`, `logger.debug()`, `logger.warn()`, and `logger.error()` log messages at various levels.
 - These logs will appear in your **console by default**.
@@ -74,7 +96,7 @@ logging.level.root=INFO
 
 #### Using `application.yml`
 
-Alternatively, if you're using YAML configuration (`src/main/resources/application.yml`), the setup would look like this:
+If you're using YAML configuration (`src/main/resources/application.yml`), the setup will look like this:
 
 ```yaml
 logging:
@@ -84,41 +106,40 @@ logging:
     root: INFO
 ```
 
+With the above configuration, your logs will now be logged into both the console and a file using the path you have given.
+
 **Optionally**, you can add more configurations like:
 
 Using `application.properties`
 
-```diff
+```properties
 logging.file.name=logs/application.log
 logging.level.root=INFO
-+ logging.level.com.yourpackage=DEBUG
-+ logging.file.max-size=10MB
-+ logging.file.max-history=10
+logging.level.com.yourpackage=DEBUG
+logging.file.max-size=10MB
+logging.file.max-history=10
 ```
 
 Using `application.yml`
 
-```diff
- logging:
-   file:
-     name: logs/application.log
-+    max-size: 10MB
-+    max-history: 10
-   level:
-     root: INFO
+```yaml
+logging:
+  file:
+    name: logs/application.log
+    max-size: 10MB
+    max-history: 10
+  level:
+    root: INFO
+    com.yourpackage: DEBUG
 ```
 
-Here is the full list of properties available for logging:
+### What these settings do:
 
-- `logging.file.name`: Specifies the name and location of the log file.
-- `logging.file.max-size`: Maximum size of the log file before rolling over.
-- `logging.file.max-history`: How many rolled-over log files to retain.
-
-**What This Does:**
-
-- Logs will be written to a file located at `logs/application.log`.
-- The logging level is set to `INFO`, but you can adjust it to `DEBUG`, `WARN`, `ERROR`, etc.
-- **Log rotation** ensures your log file doesn't grow endlessly (configurable with `max-size` and `max-history`).
+- **`logging.file.name=logs/application.log`**: Specifies that logs will be saved to a file named `application.log` in the `logs/` directory.
+- **`logging.level.root=INFO`**: Sets the default logging level to `INFO`, meaning that `INFO`, `WARN`, and `ERROR` level logs will be captured. `DEBUG` and `TRACE` logs will not appear unless specified.
+- **`logging.level.com.yourpackage=DEBUG`**: Sets the logging level for the package `com.yourpackage` to `DEBUG`, capturing detailed logs in that package, useful for troubleshooting (optional).
+- **`logging.file.max-size=10MB`**: Limits the log file size to 10MB. Once the file exceeds this size, a new log file will be created.
+- **`logging.file.max-history=10`**: Retains up to 10 previous log files before overwriting or deleting the oldest ones.
 
 ## Logging Levels
 
@@ -187,7 +208,7 @@ Place this file under `src/main/resources/logback-spring.xml`:
 </configuration>
 ```
 
-**What This Does:**
+### What This Does:
 
 - Logs will be written both to the **console** and a **file**.
 - The log file will **rotate daily**, and the application will keep logs for up to 30 days.
