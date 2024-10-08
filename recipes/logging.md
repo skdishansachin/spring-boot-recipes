@@ -1,5 +1,6 @@
 # Logging
 
+- [Introduction](#introduction)
 - [Writing Log Messages](#writing-log-messages)
   - [Logging to the console](#logging-to-the-console)
   - [Logging to a file](#logging-to-a-file)
@@ -7,7 +8,9 @@
 - [Additional Configuration](#additional-configuration-optional)
 - [Using a Logging Facade](#using-a-logging-facade)
 
-Spring Boot provides logging capabilities using [**SLF4J**](https://www.slf4j.org/) (Simple Logging Facade for Java) and [**Logback**](https://logback.qos.ch/) (the default logging framework).
+## Introduction
+
+Logging helps track the behavior of your application, allowing you to identify bugs, troubleshoot issues, and gain insights into application performance. In Spring Boot, [**SLF4J**](https://www.slf4j.org/) with [**Logback**](https://logback.qos.ch/) is used by default to give you a flexible and efficient logging setup.
 
 ## Writing Log Messages
 
@@ -27,19 +30,19 @@ Spring Boot uses **SLF4J** with **Logback** as the default logging framework, so
 
 ### Logging to the console
 
-You can log messages from any class using the `Logger` interface. To configure logging to write to a **console**, you can set this up in the `application.properties` or `application.yml` file.
+You can log messages from any class using the `Logger` interface. To configure logging to write to a **console**, you can set this up in the `application.properties` or `application.yaml` file.
 
 #### Using `application.properties`
 
-In your `src/main/resources/application.properties`, configure console-based logging like this:
+For those using `application.properties`, configure console-based logging like this:
 
 ```properties
 logging.level.root=INFO
 ```
 
-#### Using `application.yml`
+#### Using `application.yaml`
 
-If you're using YAML configuration (`src/main/resources/application.yml`), the setup would look like this:
+For those using `application.yaml`, the setup would look like this:
 
 ```yaml
 logging:
@@ -49,54 +52,52 @@ logging:
 
 This sets the log level to `INFO` for console logging.
 
-Here's an example of how to log data in a service or controller class. Feel free to use it anywhere you want:
+Here is an example of how to log in application.
 
-```java
+```diff
+import org.apache.shenyu.admin.model.custom.UserInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-public class AlertController {
+public final class SessionUtil {   
++   private static final Logger LOG = LoggerFactory.getLogger(SessionUtil.class);
 
-    private static final Logger logger = LoggerFactory.getLogger(AlertController.class);
-
-    @GetMapping("/alerts")
-    public String getAlerts() {
-        logger.info("Fetching the list of alerts");
-
-        // Log different levels
-        logger.debug("Debug level logging enabled");
-        logger.warn("This is a warning");
-        logger.error("This is an error log");
-
-        return "Todo List";
+    public static UserInfo visitor() {
+        try {
+            final UserInfo userInfo = LOCAL_VISITOR.get();
+            if (Objects.isNull(userInfo)) {
+                // try get from auth
+                setLocalVisitorFromAuth();
+            }
+            return LOCAL_VISITOR.get();
+        } catch (Exception e) {
++           LOG.warn("get user info error ,not found, used default user ,it unknown");
+        }
+        return defaultUser();
     }
 }
 ```
 
-In the above example:
+In the example above, `LOG.warn()` records a warning when something goes wrong in retrieving the user info. You can use `warn()`, `debug()`, `info()`, or `error()` depending on the severity or nature of the message you want to log.
 
-- `logger.info()`, `logger.debug()`, `logger.warn()`, and `logger.error()` log messages at various levels.
-- These logs will appear in your **console by default**.
+The original source code for the example above can be found [here](https://github.com/apache/shenyu/blob/master/shenyu-admin/src/main/java/org/apache/shenyu/admin/utils/SessionUtil.java).
 
 ### Logging to a File
 
-By default, Spring Boot logs only to the **console**. To configure logging to write to a **file**, you can set this up in the `application.properties` or `application.yml` file.
+By default, Spring Boot logs only to the **console**. To configure logging to write to a **file**, you can set this up in the `application.properties` or `application.yaml` file.
 
 #### Using `application.properties`
 
-In your `src/main/resources/application.properties`, configure file-based logging like this:
+For those using `application.properties`, configure file-based logging like this:
 
 ```properties
 logging.file.name=logs/application.log
 logging.level.root=INFO
 ```
 
-#### Using `application.yml`
+#### Using `application.yaml`
 
-If you're using YAML configuration (`src/main/resources/application.yml`), the setup will look like this:
+For those using `application.yaml`, the setup will look like this:
 
 ```yaml
 logging:
@@ -110,7 +111,7 @@ With the above configuration, your logs will now be logged into both the console
 
 **Optionally**, you can add more configurations like:
 
-Using `application.properties`
+For those using `application.properties`
 
 ```properties
 logging.file.name=logs/application.log
@@ -120,7 +121,7 @@ logging.file.max-size=10MB
 logging.file.max-history=10
 ```
 
-Using `application.yml`
+For those using `application.yaml`
 
 ```yaml
 logging:
@@ -137,7 +138,7 @@ logging:
 
 - **`logging.file.name=logs/application.log`**: Specifies that logs will be saved to a file named `application.log` in the `logs/` directory.
 - **`logging.level.root=INFO`**: Sets the default logging level to `INFO`, meaning that `INFO`, `WARN`, and `ERROR` level logs will be captured. `DEBUG` and `TRACE` logs will not appear unless specified.
-- **`logging.level.com.yourpackage=DEBUG`**: Sets the logging level for the package `com.yourpackage` to `DEBUG`, capturing detailed logs in that package, useful for troubleshooting (optional).
+- **`logging.level.com.yourpackage=DEBUG`**: Sets the logging level for the package `com.yourpackage` to `DEBUG`, capturing detailed logs in that package, useful for troubleshooting.
 - **`logging.file.max-size=10MB`**: Limits the log file size to 10MB. Once the file exceeds this size, a new log file will be created.
 - **`logging.file.max-history=10`**: Retains up to 10 previous log files before overwriting or deleting the oldest ones.
 
@@ -154,18 +155,6 @@ Logging levels allow you to control the verbosity of your logs. Here are the com
 | ERROR | Logs serious issues that might cause the application to malfunction.         |
 
 Logging levels are hierarchical. For example, if you set the logging level to `INFO`, it will capture all `INFO`, `WARN`, and `ERROR` logs, but ignore `DEBUG` and `TRACE`.
-
-To set the logging level in your configuration file, add:
-
-```properties
-logging.level.root=DEBUG
-```
-
-This will apply the `DEBUG` level globally across your app. You can also adjust the logging level for specific packages:
-
-```properties
-logging.level.com.yourpackage=DEBUG
-```
 
 ## Additional Configuration (Optional)
 
