@@ -2,6 +2,10 @@
 
 This repository has a set of recipes for Spring Boot. Each recipe covers a specific topic and includes a guide and examples to help you understand the topic. For instance, if you want to learn how to add logging to your Spring Boot application, you can refer to the logging recipe.
 
+### Recipes
+
+- [Logging](recipes/logging/basic-logging.md)
+
 ### Why this repository?
 
 I've created this repository to provide clear guides and examples for implementing common features in Spring Boot applications. Finding good examples and guides on the internet can be challenging, so I wanted to make it easier for you. I'm not an expert developer, so there might be mistakes in the recipes. Feel free to open a PR to fix them.
