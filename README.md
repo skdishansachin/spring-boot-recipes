@@ -5,6 +5,7 @@ This repository has a set of recipes for Spring Boot. Each recipe covers a speci
 ### Recipes
 
 - [Logging](recipes/logging/basic-logging.md)
+- [Database Migrations with Flyway](recipes/database/database-migrations-with-flyway.md)
 
 ### Why this repository?
 
