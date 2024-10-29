@@ -1,15 +1,25 @@
 ## Spring Boot Recipes 🌱
 
-This repository has a set of recipes for Spring Boot. Each recipe covers a specific topic and includes a guide and examples to help you understand the topic. For instance, if you want to learn how to add logging to your Spring Boot application, you can refer to the logging recipe.
+This repository has a set of recipes for Spring Boot. Each recipe covers a specific topic and includes a guide and examples to help you understand the topic.
 
 ### Recipes
 
 - [Logging](recipes/logging/basic-logging.md)
 - [Database Migrations with Flyway](recipes/database/database-migrations-with-flyway.md)
 
-### Why this repository?
+### FAQ
 
-I've created this repository to provide clear guides and examples for implementing common features in Spring Boot applications. Finding good examples and guides on the internet can be challenging, so I wanted to make it easier for you. I'm not an expert developer, so there might be mistakes in the recipes. Feel free to open a PR to fix them.
+<details>
+<summary>Why this repo?</summary>
+
+I created this repository to help developers learn Spring Boot by providing them with a set of recipes that cover different topics. Each recipe includes a guide and examples to help you understand the topic.
+</details>
+
+<details>
+<summary>What make this different from articles or blog posts?</summary>
+
+ This repository is a living, community-driven resource. Unlike static blogs, anyone can suggest updates through Pull Requests, keeping recipes accurate and up-to-date as Spring Boot evolves.
+</details>
 
 ### Contributing
 
